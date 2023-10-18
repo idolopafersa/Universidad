@@ -17,7 +17,7 @@ class SOCKET_SIMPLE_TCP:
 
     def conectar(self):
         """Convierte el objeto socket en un cliente, y se conecta a un servidor"""
-        self.socket = socket.create_connection((self.host, self.puerto))
+        self.socket = socket.create_connection(('127.0.0.1', self.puerto))
 
     def escuchar(self):
         """Convierte el objeto socket en un servidor, y recibe la peticion de un cliente"""
