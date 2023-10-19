@@ -1,11 +1,15 @@
 package analyzer;
 
 import javax.annotation.processing.SupportedSourceVersion;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Analyzer implements Runnable {
 
-    long n1 = 1;
-    long n2 = 1;
+
+    long[] entradas = {1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,35,40,45,50,60,70,80,90,100,300,500,700,1000,2000,4000,6000,10000,20000,40000,60000,80000,100000,150000,200000,300000,500000,650000,10000000,30000000,50000000,800000000,90000000,
+            100000000,500000000,999999999}; //Entradas para el programa
+
 
     Algorithm algorithm;
     long maxExecutionTime;
@@ -26,77 +30,63 @@ public class Analyzer implements Runnable {
 
     }
 
-    private void  incremento(Double ratio, long newn1, long newn2){
+   private List<Double> tiempos_algoritmo(int numintentos, long tiempoEjecucion,Algorithm algoritmoActual){
+       List<Double> tiempos = new ArrayList<>(); //Lista para guardar tiempos
+
+       Chronometer tiempo_calculo = new Chronometer(); //Cronometro para vigilar el tiempo de ejecucion
 
 
-        if(newn1<20){
-            newn1= newn1+newn1;
-        }else if(ratio <1.5){
-            newn1=newn1*100;
-        }else if(ratio < 3){
-            newn1=newn1*10000;
+
+        double tl1 = Double.MAX_VALUE; //variable para guardar tiempo minimo
+
+       int i = 0;
+
+        tiempo_calculo.start();
+        while((i < entradas.length) && (tiempo_calculo.getElapsedTime() < tiempoEjecucion)){ //While para cada N
+
+            int j = 0;
+
+            while((j<numintentos) && (tiempo_calculo.getElapsedTime() < tiempoEjecucion)){ //While para cada intento de N
+                Chronometer tiempoIntento = new Chronometer();
+
+                tiempoIntento.start();
+                algoritmoActual.init(entradas[i]);  //Ejecutamos el algoritmo
+                tiempoIntento.stop();
+
+
+                if(tl1 > tiempoIntento.getElapsedTime()*(10^10)) tl1 = tiempoIntento.getElapsedTime()*10^10; // Si ha habido un tiempo menor, es el que se guarda
+                j++;
+            }
+
+                if(tiempo_calculo.getElapsedTime() < tiempoEjecucion){
+                    tiempos.add(tl1);
+                }
+            i++;
         }
-        newn2 = newn2*2;
-
-        n2 = newn2;
-        n1 = newn1;
+        tiempo_calculo.stop();
+        return  tiempos;
     }
 
+
+
+
+
     public  String findComplexityOf(Algorithm algorithm, long maxExecutionTime) {
-        double tl1 = 999999999999999999999.0;
-        double tl2 = 999999999999999999999.0;
 
 
 
-        Chronometer chrono = new Chronometer();
+          List<Double> tiempos; // Lista para guardar los tiempos de cada iteracion
+
+          int numintentos = 300;
 
 
-        int n = 0;
+          tiempos = tiempos_algoritmo(numintentos,maxExecutionTime/2,algorithm); //Calculamos los tiempos de las iteraciones, como tiempo maximo vamos cambiando los valores hasta dar exactitud
 
 
-        double ratio = 0.0;
-
-        Chronometer algortimTimer = new Chronometer();
-        Chronometer algortimTimer2 = new Chronometer();
-        chrono.start();
-        while ((n < 5) && (chrono.getElapsedTime() <= maxExecutionTime)) {
-
-            System.out.println("Iteracion " + n + " Algoritmo " + algorithm.getName() + "Con un ratio actual de " + ratio);
-
-            algortimTimer.start();
-            algorithm.init(n1);
-            algortimTimer.pause();
-
-            tl1 = Math.min(tl1,algortimTimer.getElapsedTime());
-
-
-
-            algortimTimer2.start();
-            algorithm.init(n2);
-            algortimTimer2.pause();
-
-            tl2 = Math.min(tl2,algortimTimer2.getElapsedTime());
-
-            ratio =(tl1)/(tl2);
-            incremento(ratio,n1,n2);
-
-
-
-
-
-
-            n++;
+        for(int i = 0;i < tiempos.size();i++){
+            System.out.println("---------" + tiempos.get(i) + "-----------");
         }
 
-        System.out.println("------------------"+ ratio + "----------------");
-        if( ratio < 1.5){
-            complexity = "1";
-        }else{
-            complexity = "log(n)";
-        }
-
-
-        chrono.stop();
         return complexity;
     }
 
