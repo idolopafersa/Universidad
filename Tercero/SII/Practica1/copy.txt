@@ -1,0 +1,81 @@
+Resultados de pruebas para los proyectos
+
+Proyecto
+Tiempo por clase (minutos)
+Casos de prueba generados
+Tiempo de generación (minutos)
+Pruebas que funcionan (%)
+Cobertura de instrucciones (%)
+Cobertura de condiciones (%)
+
+Proyecto A
+2
+1200
+60
+80
+90
+50
+
+Proyecto B
+5
+2500
+120
+95
+85
+70
+
+Proyecto C
+10
+80
+10
+100
+100
+No hay ramas
+
+Proyecto D
+8
+100
+15
+90
+80
+60
+
+Proyecto E
+15
+3000
+180
+85
+70
+40
+
+Proyecto F
+3
+200
+25
+95
+90
+75
+
+Proyecto G
+20
+5000
+300
+75
+60
+30
+
+Proyecto H
+6
+150
+20
+98
+95
+85
+
+Proyecto I
+12
+400
+40
+92
+75
+55
